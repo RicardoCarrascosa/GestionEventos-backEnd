@@ -19,7 +19,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
 allRoutes(app)
-
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
   console.log('Server Deployed: http://localhost:3000')
 })
