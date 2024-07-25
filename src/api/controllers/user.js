@@ -25,7 +25,8 @@ const getUsersByID = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
   try {
     // Check for duplicates
-
+    console.log('userControler')
+    console.log(req.body)
     if (await User.findOne({ email: req.body.email })) {
       return res.status(400).json(['User already Exists', req.body])
     }
