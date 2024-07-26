@@ -1,6 +1,7 @@
 const { generateSign, verifyJWT } = require('../../config/jwt')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const dataUri = require('../../middleware/file')
 
 // GET
 const getUsers = async (req, res, next) => {
