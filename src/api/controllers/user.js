@@ -1,7 +1,6 @@
 const { generateSign, verifyJWT } = require('../../config/jwt')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
-const dataUri = require('../../middleware/file')
 
 // GET
 const getUsers = async (req, res, next) => {
@@ -26,8 +25,7 @@ const getUsersByID = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
   try {
     // Check for duplicates
-    console.log('userControler')
-    console.log(req.body)
+
     if (await User.findOne({ email: req.body.email })) {
       return res.status(400).json(['User already Exists', req.body])
     }
@@ -50,13 +48,13 @@ const logingUser = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
 
     if (!user) {
-      return res.status(400).json('User or password are incorrect 2')
+      return res.status(400).json('User or password are incorrect')
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateSign(user._id)
       return res.status(200).json({ user, token })
     } else {
-      return res.status(400).json('User or password are incorrect 3')
+      return res.status(400).json('User or password are incorrect')
     }
   } catch (error) {
     return res.status(400).json(['Error while Login a User', error])
