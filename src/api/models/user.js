@@ -19,6 +19,15 @@ userSchema.pre('save', function () {
   this.password = bcrypt.hashSync(this.password, 10)
 })
 
+userSchema.set('toJSON', {
+  virtuals: true,
+  transform: function (doc, ret, options) {
+    const toAPI = ret
+    delete toAPI.password // dont send password to API
+
+    return toAPI
+  }
+})
 const User = mongoose.model('users', userSchema, 'users')
 
 module.exports = User
