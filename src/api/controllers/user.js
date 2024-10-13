@@ -1,6 +1,7 @@
 const { generateSign, verifyJWT } = require('../../config/jwt')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const { validationResult } = require('express-validator')
 
 // GET
 const getUsers = async (req, res, next) => {
@@ -8,7 +9,12 @@ const getUsers = async (req, res, next) => {
     const users = await User.find()
     return res.status(200).json(users)
   } catch (error) {
-    return res.status(400).json(['Error getting all users', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'Error while getting a user',
+        param: 'user'
+      }
+    })
   }
 }
 const getUsersByID = async (req, res, next) => {
@@ -17,7 +23,12 @@ const getUsersByID = async (req, res, next) => {
     const users = await User.find({ _id: id })
     return res.status(200).json(users)
   } catch (error) {
-    return res.status(400).json(['Error while GETTING a User', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'Error while getting a user',
+        param: 'user'
+      }
+    })
   }
 }
 
@@ -25,9 +36,14 @@ const getUsersByID = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
   try {
     // Check for duplicates
-
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
     if (await User.findOne({ email: req.body.email })) {
-      return res.status(400).json(['User already Exists', req.body])
+      return res.status(400).json({
+        errors: { msg: 'User already Exists', path: 'user' }
+      })
     }
     const newUser = new User(req.body)
 
@@ -39,7 +55,12 @@ const registerUser = async (req, res, next) => {
     const userSaved = await newUser.save()
     return res.status(201).json(userSaved)
   } catch (error) {
-    return res.status(400).json(['Error While Creating a user', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'Error While Creating a user',
+        param: 'user'
+      }
+    })
   }
 }
 //Loging user
@@ -48,16 +69,31 @@ const logingUser = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
 
     if (!user) {
-      return res.status(400).json('User or password are incorrect')
+      return res.status(400).json({
+        errors: {
+          msg: 'User or Password are incorrect',
+          path: 'user'
+        }
+      })
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateSign(user._id)
       return res.status(200).json({ user, token })
     } else {
-      return res.status(400).json('User or password are incorrect')
+      return res.status(400).json({
+        errors: {
+          msg: 'User or Password are incorrect',
+          path: 'user'
+        }
+      })
     }
   } catch (error) {
-    return res.status(400).json(['Error while Login a User', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'User or Password are incorrect',
+        path: 'user'
+      }
+    })
   }
 }
 // Put / Update
@@ -70,7 +106,12 @@ const updateUser = async (req, res, next) => {
     const updateUser = await User.findByIdAndUpdate(id, newUser, { new: true })
     return res.status(200).json(updateUser)
   } catch (error) {
-    return res.status(400).json(['Error Updating a user', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'Error Updating the user',
+        path: 'user'
+      }
+    })
   }
 }
 
@@ -84,7 +125,12 @@ const deleteUser = async (req, res, next) => {
     // TODOOOOOO tODOOOOO
     return res.status(200).json(delUser)
   } catch (error) {
-    return res.status(400).json(['Error while DELETING a User', error])
+    return res.status(400).json({
+      errors: {
+        msg: 'Error Deleting a user',
+        path: 'user'
+      }
+    })
   }
 }
 

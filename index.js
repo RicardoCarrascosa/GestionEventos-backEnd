@@ -9,6 +9,7 @@ const allRoutes = require('./src/api/routes/routes')
 // Empiezo el servidor
 const app = express()
 app.use(cors())
+
 app.use(express.json())
 // Arranco la Base de datos
 connectDB()
