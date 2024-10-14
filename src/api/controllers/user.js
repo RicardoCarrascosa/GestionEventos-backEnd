@@ -40,6 +40,7 @@ const getUsersByID = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
   try {
     // Check for duplicates
+    //! If any Errors Delete from Cloudinary the File already uploaded
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
