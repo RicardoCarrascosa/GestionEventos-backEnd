@@ -48,7 +48,11 @@ const validateUser = (method) => {
           .escape(),
         body('password')
           .isLength({ min: 8 })
-          .withMessage('Email needs minimum 8 character')
+          .withMessage('Password needs minimum 8 character')
+          .matches(/^[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/)
+          .withMessage(
+            'Password must contain only alphanumeric and special characters'
+          )
           .escape(),
         body('rol').optional(),
         body('birthday')
