@@ -10,10 +10,12 @@ const getUsers = async (req, res, next) => {
     return res.status(200).json(users)
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'Error while getting a user',
-        param: 'user'
-      }
+      errors: [
+        {
+          msg: 'Error while getting a user',
+          param: 'user'
+        }
+      ]
     })
   }
 }
@@ -24,10 +26,12 @@ const getUsersByID = async (req, res, next) => {
     return res.status(200).json(users)
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'Error while getting a user',
-        param: 'user'
-      }
+      errors: [
+        {
+          msg: 'Error while getting a user',
+          param: 'user'
+        }
+      ]
     })
   }
 }
@@ -42,7 +46,7 @@ const registerUser = async (req, res, next) => {
     }
     if (await User.findOne({ email: req.body.email })) {
       return res.status(400).json({
-        errors: { msg: 'User already Exists', path: 'user' }
+        errors: [{ msg: 'User already Exists', path: 'user' }]
       })
     }
     const newUser = new User(req.body)
@@ -56,10 +60,12 @@ const registerUser = async (req, res, next) => {
     return res.status(201).json(userSaved)
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'Error While Creating a user',
-        param: 'user'
-      }
+      errors: [
+        {
+          msg: 'Error While Creating a user',
+          param: 'user'
+        }
+      ]
     })
   }
 }
@@ -70,10 +76,12 @@ const logingUser = async (req, res, next) => {
 
     if (!user) {
       return res.status(400).json({
-        errors: {
-          msg: 'User or Password are incorrect',
-          path: 'user'
-        }
+        errors: [
+          {
+            msg: 'User or Password are incorrect',
+            path: 'user'
+          }
+        ]
       })
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -81,18 +89,22 @@ const logingUser = async (req, res, next) => {
       return res.status(200).json({ user, token })
     } else {
       return res.status(400).json({
-        errors: {
-          msg: 'User or Password are incorrect',
-          path: 'user'
-        }
+        errors: [
+          {
+            msg: 'User or Password are incorrect',
+            path: 'user'
+          }
+        ]
       })
     }
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'User or Password are incorrect',
-        path: 'user'
-      }
+      errors: [
+        {
+          msg: 'User or Password are incorrect',
+          path: 'user'
+        }
+      ]
     })
   }
 }
@@ -107,10 +119,12 @@ const updateUser = async (req, res, next) => {
     return res.status(200).json(updateUser)
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'Error Updating the user',
-        path: 'user'
-      }
+      errors: [
+        {
+          msg: 'Error Updating the user',
+          path: 'user'
+        }
+      ]
     })
   }
 }
@@ -121,15 +135,16 @@ const deleteUser = async (req, res, next) => {
     const { id } = req.params
     const delUser = await User.findByIdAndDelete(id)
 
-    // TOOD when delete user delete also the asists he is in
-    // TODOOOOOO tODOOOOO
+    // TODO when delete user delete also the asists he is in
     return res.status(200).json(delUser)
   } catch (error) {
     return res.status(400).json({
-      errors: {
-        msg: 'Error Deleting a user',
-        path: 'user'
-      }
+      errors: [
+        {
+          msg: 'Error Deleting a user',
+          path: 'user'
+        }
+      ]
     })
   }
 }
