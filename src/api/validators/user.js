@@ -18,9 +18,7 @@ const validateUser = (method) => {
           .isLength({ min: 8 })
           .withMessage('Password needs minimum 8 character')
           .matches(/^[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/)
-          .withMessage(
-            'Password must contain only alphanumeric and special characters'
-          )
+          .withMessage('Password  special characters')
           .escape(),
         body('rol').optional(),
         body('birthday').optional().isDate().withMessage('Needs to be a date'),
@@ -41,7 +39,7 @@ const validateUser = (method) => {
     }
     case 'updateUser': {
       return [
-        body('name').withMessage('User Name needed').escape(),
+        body('name').escape(),
         body('email')
           .isEmail()
           .withMessage('Invalid email address')
@@ -51,15 +49,10 @@ const validateUser = (method) => {
           .isLength({ min: 8 })
           .withMessage('Password needs minimum 8 character')
           .matches(/^[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/)
-          .withMessage(
-            'Password must contain only alphanumeric and special characters'
-          )
+          .withMessage('Password special characters')
           .escape(),
         body('rol').optional(),
-        body('birthday')
-          .optional()
-          .isDate()
-          .withMessage('Needs to be a date  '),
+        body('birthday').optional().isDate().withMessage('Needs to be a date'),
         body('profileImage').optional()
       ]
     }

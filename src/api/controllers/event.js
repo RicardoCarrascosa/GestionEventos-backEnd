@@ -4,9 +4,16 @@ const Event = require('../models/event')
 const getEvents = async (req, res, next) => {
   try {
     const events = await Event.find().populate('organizer')
-    return res.status(200).json(events)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Obtained',
+      events
+    })
   } catch (error) {
-    return res.status(400).json(['Error getting all events', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error getting the Events'
+    return next(error)
   }
 }
 const getEventsOrgUser = async (req, res, next) => {
@@ -15,18 +22,32 @@ const getEventsOrgUser = async (req, res, next) => {
     const events = await Event.find({ organizer: user.id }).populate(
       'organizer'
     )
-    return res.status(200).json(events)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Obtained',
+      events
+    })
   } catch (error) {
-    return res.status(400).json(['Error getting all events', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error getting the Events'
+    return next(error)
   }
 }
 const getEventByID = async (req, res, next) => {
   try {
     const { id } = req.params
     const events = await Event.find({ _id: id }).populate('organizer')
-    return res.status(200).json(events)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Obtained',
+      events
+    })
   } catch (error) {
-    return res.status(400).json(['Error while GETTING a Event', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error getting the Events'
+    return next(error)
   }
 }
 
@@ -35,7 +56,9 @@ const newEvent = async (req, res, next) => {
   try {
     // Check for duplicates
     if (await Event.findOne({ name: req.body.name })) {
-      return res.status(400).json(['Event already Exists', req.body])
+      const error = new Error('Event already exists')
+      error.statusCode = 400
+      return next(error)
     }
     const newEvent = new Event(req.body)
     if (req.files) {
@@ -44,9 +67,16 @@ const newEvent = async (req, res, next) => {
     newEvent.verified = false
 
     const eventSaved = await newEvent.save()
-    return res.status(201).json(eventSaved)
+    return res.status(201).json({
+      status: 'success',
+      message: 'Event Saved',
+      eventSaved
+    })
   } catch (error) {
-    return res.status(400).json(['Error While Creating an event', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error Creating the Event'
+    return next(error)
   }
 }
 
@@ -64,9 +94,16 @@ const updateEvent = async (req, res, next) => {
     const updateEvent = await Event.findByIdAndUpdate(id, newEvent, {
       new: true
     })
-    return res.status(200).json(updateEvent)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Updated',
+      updateEvent
+    })
   } catch (error) {
-    return res.status(400).json(['Error Updating a Event', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error updating the Event'
+    return next(error)
   }
 }
 
@@ -79,9 +116,16 @@ const verifyEvent = async (req, res, next) => {
     const updateEvent = await Event.findByIdAndUpdate(id, newEvent, {
       new: true
     })
-    return res.status(200).json(updateEvent)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Verified',
+      updateEvent
+    })
   } catch (error) {
-    return res.status(400).json(['Error Updating a Event', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error updating the Event'
+    return next(error)
   }
 }
 
@@ -90,9 +134,16 @@ const deleteEvent = async (req, res, next) => {
   try {
     const { id } = req.params
     const delEvent = await Event.findByIdAndDelete(id)
-    return res.status(200).json(delEvent)
+    return res.status(200).json({
+      status: 'success',
+      message: 'Event Deleted',
+      delEvent
+    })
   } catch (error) {
-    return res.status(400).json(['Error while DELETING a Event', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error deleting the Event'
+    return next(error)
   }
 }
 
