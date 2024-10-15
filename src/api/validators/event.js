@@ -22,7 +22,11 @@ const validateEvent = (method) => {
           .isMongoId()
           .withMessage('Needs to be MongoID')
           .escape(),
-        body('eventImage').isURL().withMessage('Needs to be URL').escape(),
+        body('eventImage')
+          .optional()
+          .isURL()
+          .withMessage('Needs to be URL')
+          .escape(),
         body('verified')
           .exists()
           .withMessage('Verification is needed')
@@ -33,16 +37,26 @@ const validateEvent = (method) => {
     }
     case 'updateEvent': {
       return [
-        body('name').escape(),
-        body('type').escape(),
-        body('date').isDate().withMessage('Needs to be date format').escape(),
-        body('description').escape(),
+        body('name').optional().escape(),
+        body('type').optional().escape(),
+        body('date')
+          .optional()
+          .isDate()
+          .withMessage('Needs to be date format')
+          .escape(),
+        body('description').optional().escape(),
         body('organizer')
+          .optional()
           .isMongoId()
           .withMessage('Needs to be MongoID')
           .escape(),
-        body('eventImage').isURL().withMessage('Needs to be URL').escape(),
+        body('eventImage')
+          .optional()
+          .isURL()
+          .withMessage('Needs to be URL')
+          .escape(),
         body('verified')
+          .optional()
           .isBoolean()
           .withMessage('Needs to be a Boolean')
           .escape()

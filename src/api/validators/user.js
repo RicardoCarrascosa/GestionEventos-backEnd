@@ -39,13 +39,15 @@ const validateUser = (method) => {
     }
     case 'updateUser': {
       return [
-        body('name').escape(),
+        body('name').Optional().escape(),
         body('email')
+          .optional()
           .isEmail()
           .withMessage('Invalid email address')
           .normalizeEmail()
           .escape(),
         body('password')
+          .Optional()
           .isLength({ min: 8 })
           .withMessage('Password needs minimum 8 character')
           .matches(/^[a-zA-Z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/)
