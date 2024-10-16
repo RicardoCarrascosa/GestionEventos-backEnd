@@ -23,7 +23,7 @@ eventRoutes.post(
   '/register',
   [
     isOrg,
-    upload.fields([{ name: 'profileImage' }]),
+    upload.fields([{ name: 'eventImage' }]),
     validateEvent('createEvent'),
     doValidation
   ],

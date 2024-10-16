@@ -14,7 +14,7 @@ const validateEvent = (method) => {
           .escape(),
         body('description')
           .exists()
-          .withMessage('description is needed')
+          .withMessage('Description is needed')
           .escape(),
         body('organizer')
           .exists()
@@ -28,8 +28,7 @@ const validateEvent = (method) => {
           .withMessage('Needs to be URL')
           .escape(),
         body('verified')
-          .exists()
-          .withMessage('Verification is needed')
+          .optional()
           .isBoolean()
           .withMessage('Needs to be a Boolean')
           .escape()
