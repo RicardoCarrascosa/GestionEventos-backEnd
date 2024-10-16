@@ -12,7 +12,10 @@ const isAuth = async (req, res, next) => {
     req.user = user
     next()
   } catch (error) {
-    return res.status(400).json(['Error in Authorization', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error In Authorization'
+    return next(error)
   }
 }
 
@@ -27,10 +30,16 @@ const isOrg = async (req, res, next) => {
       req.user = user
       next()
     } else {
-      return res.status(400).json('Do Not have permision')
+      const error = new Error('Not Authorized')
+      error.status = 'error'
+      error.statusCode = 400
+      return next(error)
     }
   } catch (error) {
-    return res.status(400).json(['Error in Authorization', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error In Authorization'
+    return next(error)
   }
 }
 
@@ -45,10 +54,16 @@ const isAdmin = async (req, res, next) => {
       req.user = user
       next()
     } else {
-      return res.status(400).json('Do Not have permision')
+      const error = new Error('Not Authorized')
+      error.status = 'error'
+      error.statusCode = 400
+      return next(error)
     }
   } catch (error) {
-    return res.status(400).json(['Error in Authorization', error])
+    error.status = 'error'
+    error.statusCode = 400
+    error.message = 'Error in Authorization'
+    return next(error)
   }
 }
 
