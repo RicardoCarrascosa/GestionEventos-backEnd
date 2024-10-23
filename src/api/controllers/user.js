@@ -47,7 +47,6 @@ const registerUser = async (req, res, next) => {
     }
 
     const newUser = new User(req.body)
-
     if (req.files) {
       newUser.profileImage = req.files.profileImage[0].path
     }
@@ -110,6 +109,9 @@ const updateUser = async (req, res, next) => {
       deleteFile(oldUser.profileImage)
     }
     newUser._id = id
+    if (newUser.password) {
+      newUser.password = bcrypt.hashSync(req.body.password, 10)
+    }
     const updateUser = await User.findByIdAndUpdate(id, newUser, { new: true })
     return res.status(200).json({
       status: 'success',
