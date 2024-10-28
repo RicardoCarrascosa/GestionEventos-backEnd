@@ -22,11 +22,11 @@ const validateEvent = (method) => {
           .isMongoId()
           .withMessage('Needs to be MongoID')
           .escape(),
-        body('eventImage')
-          .optional()
-          .isURL()
-          .withMessage('Needs to be URL')
-          .escape(),
+        // body('eventImage')
+        //   .optional()
+        //   .isURL()
+        //   .withMessage('Needs to be URL')
+        //   .escape(),
         body('verified')
           .optional()
           .isBoolean()

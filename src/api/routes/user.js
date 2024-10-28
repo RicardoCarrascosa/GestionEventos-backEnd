@@ -17,11 +17,7 @@ const userRoutes = require('express').Router()
 userRoutes.get('/', [isOrg], getUsers)
 userRoutes.post(
   '/register',
-  [
-    upload.fields([{ name: 'profileImage' }]),
-    validateUser('registerUser'),
-    doValidation
-  ],
+  [upload.single('profileImage'), validateUser('registerUser'), doValidation],
   registerUser
 )
 userRoutes.post('/login', [validateUser('loginUser'), doValidation], logingUser)

@@ -45,13 +45,19 @@ const registerUser = async (req, res, next) => {
       error.statusCode = 400
       return next(error) // Forward the error to the error handler
     }
-
+    console.log(req.body)
+    if (req.body.profileImage) {
+      delete req.body.profileImage
+    }
     const newUser = new User(req.body)
-    if (req.files) {
-      newUser.profileImage = req.files.profileImage[0].path
+    console.log(req.file)
+    if (req.file) {
+      newUser.profileImage = req.file.path
+    } else {
     }
     newUser.rol = 'user'
-
+    console.log('newUSer Updated')
+    console.log(newUser)
     const userSaved = await newUser.save()
     return res.status(201).json({
       status: 'success',
@@ -61,7 +67,7 @@ const registerUser = async (req, res, next) => {
   } catch (error) {
     error.status = 'error'
     error.statusCode = 400
-    error.message = 'Error while Creating a user'
+    error.message = 'Error while creating a user'
     next(error)
   }
 }

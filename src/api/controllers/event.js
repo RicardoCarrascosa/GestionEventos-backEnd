@@ -1,4 +1,5 @@
 const Event = require('../models/event')
+const { deleteFile } = require('../../utils/deleteFile')
 
 // GET
 const getEvents = async (req, res, next) => {
@@ -54,15 +55,20 @@ const getEventByID = async (req, res, next) => {
 // post
 const newEvent = async (req, res, next) => {
   try {
+    console.log(req.body)
     // Check for duplicates
     if (await Event.findOne({ name: req.body.name })) {
       const error = new Error('Event already exists')
       error.statusCode = 400
       return next(error)
     }
+    if (req.body.eventImage) {
+      delete req.body.eventImage
+    }
     const newEvent = new Event(req.body)
-    if (req.files) {
-      newEvent.eventImage = req.files.eventImage[0].path
+
+    if (req.file) {
+      newEvent.eventImage = req.file.path
     }
     newEvent.verified = false
 
@@ -84,7 +90,6 @@ const newEvent = async (req, res, next) => {
 const updateEvent = async (req, res, next) => {
   try {
     const { id } = req.params
-
     // Event can only be checked by admin and correct function
     if ('verified' in req.body) {
       delete req.body.verified
@@ -134,6 +139,10 @@ const deleteEvent = async (req, res, next) => {
   try {
     const { id } = req.params
     const delEvent = await Event.findByIdAndDelete(id)
+    console.log(delEvent)
+    if (delEvent.eventImage) {
+      deleteFile(delEvent.eventImage)
+    }
     return res.status(200).json({
       status: 'success',
       message: 'Event Deleted',
