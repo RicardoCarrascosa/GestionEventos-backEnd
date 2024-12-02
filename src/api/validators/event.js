@@ -11,6 +11,8 @@ const validateEvent = (method) => {
           .withMessage('Date is needed')
           .isDate()
           .withMessage('Needs to be date format')
+          .isAfter(new Date().toString())
+          .withMessage('Events cannot be in the past')
           .escape(),
         body('description')
           .exists()

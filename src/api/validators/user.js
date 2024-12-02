@@ -21,7 +21,12 @@ const validateUser = (method) => {
           .withMessage('Password  special characters')
           .escape(),
         body('rol').optional(),
-        body('birthday').optional().isDate().withMessage('Needs to be a date'),
+        body('birthday')
+          .optional()
+          .isDate()
+          .withMessage('Needs to be a date')
+          .isBefore(new Date().toString())
+          .withMessage('Birthday cannot be in the future'),
         body('profileImage').optional()
       ]
     }
